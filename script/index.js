@@ -103,7 +103,7 @@ const DisplayWordDetails = (word) =>{
               card.innerHTML = `
                     <div class="bg-white rounded-xl shadow-sm text-center py-20 px-5 space-y-4">
                     <h2 class="text-2xl font-bold">${word.word ? word.word : "শব্দ পাওয়া যায়নি"}</h2>
-                     <p class="font-semibold">Meaning /Pronunciation</p>
+                     <p   class="font-semibold">Meaning /Pronunciation</p>
                     <div class="text-2xl font-bold font-bangla text-[#18181B]">"${word.meaning? word.meaning : "অর্থ পাওয়া যায়নি"} / ${word.pronunciation? word.pronunciation: "pronunciation পাওয়া যায়নি"}"</div>
                      <div class="flex justify-between items-center">
                     <button  onclick="loadWordDetail(${word.id})"  class="btn bg-[#1A91FF10]  hover:bg-[#1A91FF80]"><i class="fa-solid fa-circle-info"></i></button>
@@ -140,3 +140,21 @@ const displayLessons=(lessons)=>{
         
 }
 loadLessons();
+
+document.getElementById("btn-search").addEventListener("click", ()=>{
+       removeActive();
+       const input = document.getElementById("input-search");
+       const searchValue = input.value.trim().toLowerCase();
+       console.log(searchValue);
+
+      fetch("https://openapi.programming-hero.com/api/words/all")
+      .then((res)=> res.json())
+      .then(data=>{
+           const allWords = data.data;
+           console.log(allWords);
+           const filterWords = allWords.filter((word)=>word.word.toLowerCase().includes(searchValue));
+
+             displayLevelWord(filterWords);
+      });
+
+});
