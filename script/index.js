@@ -1,3 +1,19 @@
+const createElements = (arr)=>{
+      const htmlElements = arr.map(el => `<span class="btn">${el}</span>`);
+      return(htmlElements.join(" "));
+}
+
+const manageSpinner = (status)=>{
+    if(status==true){ 
+        document.getElementById("spinner").classList.remove("hidden");
+        document.getElementById("word-container").classList.add("hidden");
+      
+    }else{
+       document.getElementById("word-container").classList.remove("hidden");
+       document.getElementById("spinner").classList.add("hidden");
+    }
+
+   }
 const loadLessons = () => {
      fetch("https://openapi.programming-hero.com/api/levels/all") // promise of response
 
@@ -11,6 +27,7 @@ const removeActive =()=>{
             lessonButtons.forEach(btn=> btn.classList.remove("active"));
 }
  const loadLevelWord= (id) => {
+       manageSpinner(true);
        const url = `https://openapi.programming-hero.com/api/level/${id}`
     //    console.log(url);
      fetch(url)
@@ -52,9 +69,7 @@ const DisplayWordDetails = (word) =>{
 
             <div>
                 <h2 class="font-bold">Synonym</h2>
-                <span class="btn">syn1</span>
-                <span class="btn">syn2</span>
-                <span class="btn">syn3</span>
+                   <div>${createElements(word.synonyms)}</div>
             </div>
         `
         
@@ -74,7 +89,9 @@ const DisplayWordDetails = (word) =>{
              <p class="text-xl font-medium text-gray-400">এই Lesson এ এখনো কোন Vocabulary যুক্ত করা হয়নি।</p>
              <h2 class="text-3xl font-bold">নেক্সট Lesson এ যান</h2>
             </div>`;
-           return;
+
+            manageSpinner(false);
+            return;
        }
 
        //2.get inti every word
@@ -96,6 +113,8 @@ const DisplayWordDetails = (word) =>{
               `;
              wordContainer.append(card);
          });
+
+         manageSpinner(false);
  };   
        
 const displayLessons=(lessons)=>{
